@@ -1,0 +1,53 @@
+services:
+  backend:
+    container_name: backend
+    image: node:22-alpine
+    profiles:
+      - dev
+      - test
+    ports:
+      - ${PORT}:${PORT}
+    working_dir: /app
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    stdin_open: true 
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+
+  postgres:
+    container_name: postgres_container-xlynxai
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+       - postgres:/data/postgres
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  db_test:
+    container_name: postgres_container-xlynxai-test
+    image: postgres:16
+    profiles:
+      - test
+    ports:
+      - '${TEST_DB_HOST_PORT:-5434}:5432'
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-secret}
+      - POSTGRES_DB=${TEST_DB_NAME:-test_db}
+volumes:
+  postgres:
+  node_modules:
