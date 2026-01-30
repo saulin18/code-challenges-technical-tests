@@ -9,6 +9,7 @@ export const useTasks = (limit: number) => {
   const taskServiceInstance = taskService(accessToken);
 
   return useInfiniteQuery({
+    
     queryKey: ["tasks", user?.id, limit],
     queryFn: async ({ pageParam = 0 }) => {
       const result = await taskServiceInstance.getTasks(user?.id || "", limit, pageParam);

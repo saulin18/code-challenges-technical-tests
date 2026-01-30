@@ -46,7 +46,6 @@ export const queryClient = new QueryClient({
   }),
 });
 
-
 export function QueryClientConfig({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>

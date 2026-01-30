@@ -14,8 +14,8 @@ import { useTaskElapsedTime } from '../hooks/useTaskElapsedTime';
 export const updateTaskFormSchema = z.object({
     title: z.string().max(200).optional(),
     description: z.string().max(1000).optional(),
-    assignedTo: z.string().uuid().optional().or(z.literal("")),
-    statusId: z.string().uuid().optional().or(z.literal("")),
+    assignedTo: z.uuid().optional().or(z.literal("")),
+    statusId: z.uuid().optional().or(z.literal("")),
     endingTime: z.coerce.date().optional(),
 });
 

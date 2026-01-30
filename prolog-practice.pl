@@ -65,4 +65,34 @@ binary_search(NumberToFind, Left, Right, N) :-
 
 
 
+% Sean un conjunto de puntos A, B, C, ..., Z, con coordenadas x, y
+% definidos en la base de conocimientos, se necesita realizar una
+% aplicación de consola para cubrir los siguientes requisitos
+% funcionales:
+% a) Imprima en consola, dados dos referencias a puntos, la
+% distancia que hay entre ellos.
+% b) Imprima en consola, dadas dos referencias puntos y un valor
+% x, si la distancia entre esos puntos es mayor o menor que x con
+% el formato  "La distancia entre los dos puntos es mayor/menor
+% que x"
 
+
+distance_between_two_points(X1, Y1, X2, Y2, DISTANCE) :-
+    DX is X2 - X1,
+    DY is Y2 - Y1,
+    DISTANCE is sqrt(DX * DX + DY * DY).
+
+
+is_distance_greater_or_less(X1, Y1, X2, Y2, X, Result) :-
+    Result :- distance_between_two_points(X1, Y1, X2, Y2, DISTANCE)
+    (Result > X 
+        -> write('La distancia entre los dos puntos es mayor que '), write(X)
+        ; write('La distancia entre los dos puntos es menor que '), write(X)
+    )
+
+
+point(0,0).
+point(1,0).
+point(2,3).
+point(4,2).
+point(5,3).

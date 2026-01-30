@@ -20,7 +20,6 @@ function LoginForm() {
     const { login: loginMutation } = useAuth(authService());
     const navigate = useNavigate();
     const form = useForm<LoginFormData>({
-        // @ts-expect-error - Zod v4 compatibility issue with @hookform/resolvers
         resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",

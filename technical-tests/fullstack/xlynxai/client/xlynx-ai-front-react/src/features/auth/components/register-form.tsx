@@ -21,7 +21,6 @@ function RegisterForm() {
     const { register: registerMutation } = useAuth(authService());
 
     const form = useForm<RegisterFormData>({
-        // @ts-expect-error - Zod v4 compatibility issue with @hookform/resolvers
         resolver: zodResolver(registerSchema),
         defaultValues: {
             email: "",
