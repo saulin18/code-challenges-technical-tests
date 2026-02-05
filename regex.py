@@ -166,7 +166,7 @@ regex_below(234)
 
 # 57. Word Starts & Ends with Vowel
 #
-# Write a Python program that checks whether a word starts and ends with a vowel in a given string. Return true if a word matches 
+# Write a Python program that checks whether a word starts and ends with a vowel in a given string. Return true if a word matches
 # the condition; otherwise, return false.
 #
 # Sample Data:
@@ -174,6 +174,40 @@ regex_below(234)
 # ("Red White Black") -> False
 # ("abcd dkise eosksu") -> True
 
+
 def starts_and_end_with_a_vowel(string: str) -> bool:
     regex = re.compile(r"\b[aeiouAEIOU]\w*[aeiouAEIOU]\b")
     return bool(re.search(regex, string))
+
+
+#
+# IP Validation
+# Description:
+# Write an algorithm that will identify valid IPv4 addresses in dot-decimal format. IPs should be considered valid if they consist of four octets,
+# with values between 0 and 255, inclusive.
+# Valid inputs examples:
+# Examples of valid inputs:
+# 1.2.3.4
+# 123.45.67.89
+# Invalid input examples:
+# 1.2.3
+# 1.2.3.4.5
+# 123.456.78.90
+# 123.045.067.089
+# Notes:
+# Leading zeros (e.g. 01.02.03.04) are considered invalid
+# Inputs are guaranteed to be a single string
+
+
+def ip_validation(strng: str) -> bool:
+    ten_to_99_regex = r"[1-9][0-9]"
+    one_hundred_regex = r"1[0-9][0-9]"
+    two_hundred_regex = r"2[0-4][0-9]"
+    two_hundred_fifty_regex = r"25[0-5]"
+    octet = r"0|[1-9]|{}|{}|{}|{}".format(
+        ten_to_99_regex, one_hundred_regex, two_hundred_regex, two_hundred_fifty_regex
+    )
+    pattern = f"^({octet})\\.({octet})\\.({octet})\\.({octet})$"
+    
+    res = re.fullmatch(pattern, strng)
+    return bool(res)

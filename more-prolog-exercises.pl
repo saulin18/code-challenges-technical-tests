@@ -1,4 +1,5 @@
 
+
 %(1) For below facts, rules, and goals write English Meanings.
 %(1) color(carrots, orange).
 %(2) likes(Person, carrots):-vegetarian(Person).
@@ -209,73 +210,4 @@ occurs([_, T], N, X) :- N > 1, N1 is N - 1, occurs(T, N1, X).
 
 sumlist([], 0).
 sumlist([H|T], N) :- sumlist(T, N1), N is N1 + H.
-
-
-last([H], H).
-last([_|T], X) :- last(T, X).
-
-
-prefix([], _).
-prefix([H|T], [H|L]) :- prefix(T, L).
-
-suffix([], _).
-suffix(S, L) :- S = L.
-suffix([S, [H|T]]) :- suffix(S, T).
-
-
-
-max_list([H], H).
-max_list([H|T], M) :- max_list(T, M1), M is max(H, M1).
-
-length_list([], 0).
-length_list([H], 1).
-length_list([H|T], N) :- length_list(T, N1), N is N1 + 1.
-
-product_list([], 1).
-product_list([H], H).
-product_list([H|T], P) :- product_list(T, P1), P is P1 * H.
-
-
-count(X, [], 0).
-count(X, [X], 1).
-count(X, [X|T], N) :- count(X, T, N1), N is N1 + 1.
-count(X, [H|T], N) :- H \= X, count(X, T, N).
-
-
-at_most(X, L, M) :- count(X, L, N), N =< M.
-
-% if m is the list l with all occurrences of x replaced by y
-replace(X, Y, [], []).
-replace(X, Y, [X|T], [Y|M]) :- replace(X, Y, T, M).
-replace(X, Y, [H|T], [H|M]) :- H \= X, replace(X, Y, T, M).
-
-
-% Define a predicate reverse_acc(L,Acc,R) which holds iff R is the reverse of L with the elements of Acc prepended.
-reverse_acc([], Acc, Acc).
-reverse_acc([H|T], Acc, R) :- reverse_acc(T, [H|Acc], R).
-
-% Define a predicate last(L, X), which holds true iff X is the last element of the list L.
-
-last([H], H).
-last([_|T], X) :- last(T, X).
-
-nth_element(1, [H|_], H).
-nth_element(N, [_|T], X) :- N > 1, N1 is N - 1, nth_element(N1, T, X).
-
-% Define the predicate member_once(X,L), which holds true iff X occurs only once in L, use cut operator to
-% avoid redundant computations.
-
-member_once(X, [X|T]) :- \+ member(X, T), !.
-member_once(X, [H|T]) :- member_once(X, T).
-
-% Define the predicate not_member(X, L), which holds iff X not exists in the list L. 
-
-not_member(X, L) :- \+ member(X, L), !.
-
-% Define the predicate all_different(L), which holds iff all elements in L are different.
-
-all_different([]) :- !.
-all_different([H|T]) :- not_member(H, T), all_different(T).
-
-
 
