@@ -211,3 +211,25 @@ occurs([_, T], N, X) :- N > 1, N1 is N - 1, occurs(T, N1, X).
 sumlist([], 0).
 sumlist([H|T], N) :- sumlist(T, N1), N is N1 + H.
 
+
+1. En el fichero 'taller.pl' programe subconjunto(Sb, S), donde la lista Sb es subconjunto de la lista S, 
+utilizando el siguiente predicado:
+incluye(C, L) :-     % El elemento C ocurre en la lista L
+    member(C, L).    % member está predefinido en SWI-PROLOG
+
+subconjunto([], S).
+subconjunto([H|T], S) :-
+        incluye(H, S),
+        subconjunto(T, S).
+-
+incluye(C, L) :-
+    member(C, L).
+
+
+3. En el fichero 'taller.pl' programe además disjunto(C, D), donde las listas C y D cumplen que C ∩ D = ∅. 
+Debe utilizar el predicado incluye(C, L) del ejercicio 1 y el predicado not(X) predefinido en SWI-PROLOG.
+
+disjunto([], _).
+disjunto([H|T], D) :-
+    not(incluye(H, D)),
+    disjunto(T, D).

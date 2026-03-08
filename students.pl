@@ -375,3 +375,17 @@ print_golden_ratio(N) :-
         write("Proporción áurea en posición "), write(N), write(": "), write(Ratio), nl
     ).
 
+
+sublist([], []).
+sublist([H|T], [H|Sub]) :-
+    sublist(T, Sub).
+sublist([H|T], Sub) :-
+    sublist(T, Sub).
+
+
+penultimo(X , [X]) :-
+    write("La lista tiene un solo elemento"), nl.
+
+penultimo(X ,[X, _]).
+penultimo(X, [_|T]) :-
+    penultimo(X, T).
