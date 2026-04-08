@@ -3,6 +3,11 @@ import { CurrencyApiClient } from "./currency-api-client";
 import { ExchangeRateResponse } from "./exchange-rate-response";
 
 export class CacheEntry {
+
+  constructor(rate: number, createdAt: Date) {
+    this.rate = 0
+    this.createdAt = new Date()
+  }
   rate: number;
   createdAt: Date;
 }
@@ -89,7 +94,7 @@ export class CurrencyConversion {
       if (!rate) throw new Error("Rate doesnt exist");
 
       return rate;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(
         `Error fetching exchange rate for ${currencyCode}: ${error.message}`,
       );
