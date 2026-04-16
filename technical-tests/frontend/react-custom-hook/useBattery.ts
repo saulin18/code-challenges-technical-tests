@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { on, off } from "./lib/utils";
+import { on, off } from "./utils";
 export interface BatteryState {
   charging: boolean;
   chargingTime: number;
