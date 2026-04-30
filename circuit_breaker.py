@@ -1,7 +1,8 @@
 import asyncio
 import random
 import time
-
+from typing import Callable, Any, TypeVar
+from collections.abc import Awaitable
 
 
 class CircuitBreaker:
@@ -60,7 +61,7 @@ class CircuitBreaker:
         return (
             self.is_open
             and self.last_failure_time is not None 
-            and time() - self.last_failure_time > self.timeout
+            and time.time() - self.last_failure_time > self.timeout
         )
    
     def _record_success(self):
@@ -76,12 +77,22 @@ class CircuitBreaker:
         if self.failure_count >= self.failure_threshold:
             self.is_open = True    
     
-    
+T = TypeVar('T')
 # Test del circuit breaker
 async def unreliable_service():
     if random.random() < 0.7:  # 70% de fallos
         raise Exception("Service unavailable")
     return "Success"
+
+async def retry(func: Callable[..., Awaitable[T]], max_retries: int = 3, delay: float = 1, *args, **kwargs) -> T:
+    try:
+        return await func(*args, **kwargs)
+    except Exception as e:
+        print(f"Error: {e}")
+        await asyncio.sleep(delay)
+        if max_retries == 0:
+            raise 
+        return await retry(func, max_retries=max_retries - 1, delay=delay * 2, *args, **kwargs)
 
 
 # Probar con diferentes escenarios
@@ -105,3 +116,4 @@ if __name__ == "__main__":
                 print(f"Error {i}: {e}")
 
     asyncio.run(main())
+

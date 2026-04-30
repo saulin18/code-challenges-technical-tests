@@ -211,7 +211,8 @@ class ReNameAbleClass(object):
 # - What is it? - ask Tim.
 # - Do not know, frankly, it's secret! It's from army! - boss was obviously excited.
 # - So how are we supposed to write anything, if it is so big secret?
-# - And that's the point! We won't know it, but we will write it. We have to prepare mechanism to create dynamic classes with propertie
+# - And that's the point! We won't know it, but we will write it. We have to prepare mechanism to 
+# create dynamic classes with propertie
 # s and methods given as a parameters. - explained boss.
 # - I don't think that's, umm... But would we at least know names of these properties and methods, right?
 # - No. Remember that it's secret, so we'll not know anything!
@@ -225,7 +226,8 @@ class ReNameAbleClass(object):
 # Tim also asked you to make sure that if class name is empty, it should be None as result, and to make possible to call function
 # without second parameter.
 #
-# Do not worry, these test properties and methods are dummy, so you won't know the army's mysteries, so you (probably) won't be executed.
+# Do not worry, these test properties and methods are dummy, so you won't know the army's mysteries, 
+# so you (probably) won't be executed.
 #
 #
 #
@@ -234,3 +236,47 @@ class ReNameAbleClass(object):
 def create_class(cls_name, secrets = {}):
     
     return type(cls_name, (), secrets)
+
+
+
+
+
+# metaclass are always derived from the type class. 
+# the type class has functions to create class objects
+# the type class has also a default implementation of the __call__ method, for creating object instances.
+class Singleton_metaclass(type):
+
+    # invoked to create the class object instance (for holding static data)
+    # this function is called exactly once, in order to create the class instance!
+    def __new__(meta_class, name, bases, cls_dict, **kwargs):
+
+        print("Singleton_metaclass: __new__ meta_class:", meta_class, "name:", name, "bases:", bases, "cls_dict:", cls_dict, f'kwargs: {kwargs}')
+
+        class_instance = super().__new__(meta_class, name, bases, cls_dict)
+        print("Singleton_metaclass: __new__ return value: ", class_instance, "type(class_instance):", type(class_instance))
+
+        # the class class variable __singleton_instance__ will hold a reference to the one an only object instance of this class.
+        class_instance.__singleton_instance__ = None
+
+        return class_instance
+ 
+    def __call__(cls, *args, **kwargs):
+        # we get here to create an object instance. the class object has already been created.
+        print("Singleton_metaclass: __call__ args:", *args, f'kwargs: {kwargs}')
+
+        # check if the singleton has already been created.
+        if cls.__singleton_instance__ is None:
+
+            # create the one an only instance object.
+            instance = cls.__new__(cls)
+
+            # initialise the one and only instance object
+            instance.__init__(*args, **kwargs)
+
+            # store the singleton instance object in the class variable __singleton_instance__
+            cls.__singleton_instance__ = instance
+
+        # return the singleton instance
+        return cls.__singleton_instance__
+        
+ 
