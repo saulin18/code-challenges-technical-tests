@@ -39,8 +39,7 @@ A(M, N, Result) :-
     A(M, TempResult, Result)
 
 
-% 6. Dadas las siguientes relaciones que permiten describen la complejidad temporal 
-% de algunos algoritmos en el peor caso. 
+% 6. Realice los siguientes algoritmos:
 % 6.1. Búsqueda secuencial: Sn= n    para n≥0 
 % 6.2. Búsqueda binaria (p. 289-): S1= 2, Sn= S└n/2┘ +1    para n≥2     
 
