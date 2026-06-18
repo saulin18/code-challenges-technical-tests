@@ -66,10 +66,13 @@ class NetworkGraph:
             
             # The Problem: "The Distributed Data Sync (Mirroring)"
 
-# Imagine you are building a system like Dropbox or Google Drive Desktop. You have a cluster of "Edge Servers" across the globe. Some servers are connected to each other via high-speed fiber, forming a network (a Graph).
+# Imagine you are building a system like Dropbox or Google Drive Desktop. You have a cluster of "Edge Servers"
+# across the globe. Some servers are connected to each other via high-speed fiber, forming a network (a Graph).
 
 # **The Task:**
-# You need to implement a "Synchronization Manager" that ensures a data update (a file change) originating at Server A reaches all other servers in the network as quickly as possible, while using the minimum number of network links (to save cost/bandwidth).
+# You need to implement a "Synchronization Manager" that ensures a data update (a file change) originating 
+# at Server A reaches all other servers in the network as quickly as possible, while using the minimum number
+# of network links (to save cost/bandwidth).
 
 # **The API:**
 
@@ -79,7 +82,8 @@ class NetworkGraph:
 
 # 2. get_sync_path(start_server: str) -> List[Tuple[str, str]]:
 
-# - Returns a list of links (edges) that form a Minimum Spanning Tree (MST). This ensures every server is connected with the lowest possible total latency.
+# - Returns a list of links (edges) that form a Minimum Spanning Tree (MST). This ensures every server is 
+# connected with the lowest possible total latency.
 
 # 3. broadcast_update(file_id: str, start_server: str):
 
@@ -92,7 +96,8 @@ class NetworkGraph:
 # # ### Approach
 
 # # - Graph representation: Use an adjacency list to represent the network of servers and their connections.
-# # - Algorithm: Use prim's algorithm to compute the minimum spanning tree (MST) of the graph, as it expands outward from a node and is efficient for dense graphs.
+# # - Algorithm: Use prim's algorithm to compute the minimum spanning tree (MST) of the graph,
+# as it expands outward from a node and is efficient for dense graphs.
 
 # # ### Implementation Steps:
 
@@ -100,7 +105,8 @@ class NetworkGraph:
 # # - Implement the `get_sync_path` method to compute the MST using Prim's algorithm.
 # #     - Add the starting server to a priority queue.
 # #     - While the priority queue is not empty, pop the server with the lowest latency.
-# #     - For each neighbor of the popped server, if it is not already in the MST, add it to the priority queue with its latency.
+# #     - For each neighbor of the popped server, if it is not already in the MST, add it to the priority 
+# queue with its latency.
 # #     - Continue until all servers are included in the MST.
 # #     - Return the edges of the MST as a list of tuples.
 # # - Implement the `broadcast_update` method to simulate the propagation of a file update across the MST.
