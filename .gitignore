@@ -21,6 +21,11 @@ wheels/
 *.egg
 MANIFEST
 
+# C#
+bin/
+obj/
+
+
 # Virtual environments
 venv/
 env/
