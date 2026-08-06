@@ -21,6 +21,33 @@
 #     board[i][j] is 'X' or 'O'.
 
 
+class DSU:
+    def __init__(self, n: int):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, x: int) -> int:
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+
+    def union(self, x: int, y: int) -> None:
+        parent_x = self.find(x)
+        parent_y = self.find(y)
+        if parent_x == parent_y:
+            return
+        if self.rank[parent_x] < self.rank[parent_y]:
+            self.parent[parent_x] = parent_y
+        elif self.rank[parent_x] > self.rank[parent_y]:
+            self.parent[parent_y] = parent_x
+        else:
+            self.parent[parent_y] = parent_x
+            self.rank[parent_x] += 1
+
+    def is_connected(self, x: int, y: int) -> bool:
+        return self.find(x) == self.find(y)
+
+
 from typing_extensions import List
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
@@ -62,6 +89,34 @@ class Solution:
                     continue
                 if board[r][c] == 'O':
                     board[r][c] = 'X'
+    
+    def solve_with_dsu(self, board: List[List[str]]) -> None:
+        def index(r: int, c: int) -> int:
+            return r * cols + c
+        rows = len(board)
+        cols = len(board[0])
+        dsu = DSU(rows * cols + 1)
+        for r in range(rows):
+            for c in range(cols):
+                if board[r][c] == 'O':
+                    if r == 0 or r == rows - 1 or c == 0 or c == cols - 1:
+                        # rows * cols is the dummy node for the edge nodes
+                        dsu.union(index(r, c), rows * cols)
+                    else:
+                        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                            if board[r + dr][c + dc] == 'O':
+                                dsu.union(index(r, c), index(r + dr, c + dc))
+        
+        for r in range(rows):
+            for c in range(cols):
+                if board[r][c] == 'O' and not dsu.is_connected(index(r, c), rows * cols):
+                    board[r][c] = 'X'
+        
+        
+        
+        
+
+   
         
         
         
