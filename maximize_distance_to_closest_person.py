@@ -28,40 +28,82 @@
 # At least one seat is empty.
 # At least one seat is occupied.
 
+# class Solution:
+#     def maxDistToClosest(self, seats: List[int]) -> int:
+
+#         max_distance = 0
+#         first_one_index = -1
+#         last_one_index = -1
+#         max_distance_between_ones = 0
+
+#         prev_one_index = -1
+#         for index in range(len(seats)):
+#             if seats[index] == 0:
+#                 continue
+            
+#             if first_one_index == -1:
+#                 first_one_index = index
+#                 last_one_index = index
+#                 prev_one_index = index
+#                 continue
+
+#             distance = (index - prev_one_index) // 2
+#             max_distance_between_ones = max(
+#                 max_distance_between_ones,
+#                 distance,
+#             )
+#             last_one_index = index
+#             prev_one_index = index
+
+#         max_distance = max(
+#             max_distance_between_ones,
+#             first_one_index,
+#             len(seats) - 1 - last_one_index,
+#         )
+
+#         return max_distance
+
+
 from typing import List
-
-
 class Solution:
     def maxDistToClosest(self, seats: List[int]) -> int:
 
-        max_distance = 0
-        first_one_index = -1
-        last_one_index = -1
-        max_distance_between_ones = 0
+        n = len(seats)
 
-        prev_one_index = -1
-        for index in range(len(seats)):
-            if seats[index] == 0:
-                continue
-            
-            if first_one_index == -1:
-                first_one_index = index
-                last_one_index = index
-                prev_one_index = index
-                continue
+        left = [n] * (n + 1)
+        right = [n] * (n + 1)
 
-            distance = (index - prev_one_index) // 2
-            max_distance_between_ones = max(
-                max_distance_between_ones,
-                distance,
-            )
-            last_one_index = index
-            prev_one_index = index
+        left[0] = 0 if seats[0] == 1 else n
+        
+        for i in range(1, n):
+            if seats[i] == 1: left[i] = 0; continue
+            left[i] = left[i - 1] + 1
 
-        max_distance = max(
-            max_distance_between_ones,
-            first_one_index,
-            len(seats) - 1 - last_one_index,
+        for i in range(n - 1, -1, -1):
+            if seats[i] == 1: right[i] = 0; continue
+            right[i] = right[i + 1] + 1
+
+        return max(
+            min(left[i], right[i])  for i, seat in enumerate(seats) if seat == 0 
         )
+        
+        
 
-        return max_distance
+# class Solution:
+#     def maxDistToClosest(self, seat: List[int]) -> int:
+#         n=len(seat)
+#         l=-1
+#         mdist=0
+#         for r in range(n):
+#             if seat[r]==1:
+#                 if l==-1:
+#                     mdist=r
+#                 mdist=max(mdist,(r-l)//2)
+#                 l=r
+#         mdist=max(mdist,(n-1-l))
+#         return mdist
+            
+
+
+
+        
