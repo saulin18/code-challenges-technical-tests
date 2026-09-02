@@ -29,16 +29,18 @@ import java.util.*;
 public class Graph {
 
     private static int uidCounter = 0;
+    private static HashMap<Vertex, Set<Vertex>> adjacencyList;
     Set<Vertex> vertices;
 
 
     public Graph() {
         vertices = new HashSet<>();
-        vertices = new HashSet<>();
+        adjacencyList = new HashMap<>();
     }
 
     public void addVertex(Vertex vertex) {
         vertices.add(vertex);
+        adjacencyList.put(vertex, new HashSet<>());
     }
 
     public void addVertices(Vertex... vertices) {
@@ -55,6 +57,8 @@ public class Graph {
         vertices.add(edge.v1);
         vertices.add(edge.v2);
         vertices.add(edge);
+        adjacencyList.get(edge.v1).add(edge.v2);
+        adjacencyList.get(edge.v2).add(edge.v1);
     }
 
     public void addEdges(Vertex... vertices) {
