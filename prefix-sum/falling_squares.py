@@ -43,106 +43,107 @@
 #     1 <= sideLengthi <= 106
 
 
-from collections.abc import Callable
+# from typing_extensions import List
+# from collections.abc import Callable
 
 
-class SegTree:
-    def __init__(
-        self, n: int, identity: int = 0, function: Callable = lambda x, y: max(x, y)
-    ):
-        self.lazy: list[int | None] = [None] * (4 * n)
-        self.arr: list[int] = [0] * (4 * n)
-        self.n: int = n
-        self.identity: int = identity
-        self.function: Callable = function
+# class SegTree:
+#     def __init__(
+#         self, n: int, identity: int = 0, function: Callable = lambda x, y: max(x, y)
+#     ):
+#         self.lazy: list[int | None] = [None] * (4 * n)
+#         self.arr: list[int] = [0] * (4 * n)
+#         self.n: int = n
+#         self.identity: int = identity
+#         self.function: Callable = function
 
-    def query(
-        self, left: int, right: int, start: int = 0, end: int = -1, node: int = 0
-    ) -> int:
-        if end == -1:
-            end = self.n - 1
-        if start > right or end < left:
-            return self.identity
-        if start >= left and end <= right:
-            return self.arr[node]
-        self.push(node)
-        left_child = 2 * node + 1
-        right_child = 2 * node + 2
-        mid = (start + end) // 2
-        return self.function(
-            self.query(left, right, start, mid, left_child),
-            self.query(left, right, mid + 1, end, right_child),
-        )
+#     def query(
+#         self, left: int, right: int, start: int = 0, end: int = -1, node: int = 0
+#     ) -> int:
+#         if end == -1:
+#             end = self.n - 1
+#         if start > right or end < left:
+#             return self.identity
+#         if start >= left and end <= right:
+#             return self.arr[node]
+#         self.push(node)
+#         left_child = 2 * node + 1
+#         right_child = 2 * node + 2
+#         mid = (start + end) // 2
+#         return self.function(
+#             self.query(left, right, start, mid, left_child),
+#             self.query(left, right, mid + 1, end, right_child),
+#         )
 
-    def update(
-        self,
-        value: int,
-        left: int,
-        right: int,
-        start: int = 0,
-        end: int = -1,
-        node: int = 0,
-    ) -> None:
-        if end == -1:
-            end = self.n - 1
-        if start > right or end < left:
-            return None
-        if start >= left and end <= right:
-            self.arr[node] = value
-            self.lazy[node] = value
-            return None
-        self.push(node) if start != end else None
-        left_child = 2 * node + 1
-        right_child = 2 * node + 2
-        mid = (start + end) // 2
-        self.update(value, left, right, start, mid, left_child)
-        self.update(value, left, right, mid + 1, end, right_child)
-        self.arr[node] = self.function(self.arr[left_child], self.arr[right_child])
-        return None
+#     def update(
+#         self,
+#         value: int,
+#         left: int,
+#         right: int,
+#         start: int = 0,
+#         end: int = -1,
+#         node: int = 0,
+#     ) -> None:
+#         if end == -1:
+#             end = self.n - 1
+#         if start > right or end < left:
+#             return None
+#         if start >= left and end <= right:
+#             self.arr[node] = value
+#             self.lazy[node] = value
+#             return None
+#         self.push(node) if start != end else None
+#         left_child = 2 * node + 1
+#         right_child = 2 * node + 2
+#         mid = (start + end) // 2
+#         self.update(value, left, right, start, mid, left_child)
+#         self.update(value, left, right, mid + 1, end, right_child)
+#         self.arr[node] = self.function(self.arr[left_child], self.arr[right_child])
+#         return None
 
-    def push(self, node: int) -> None:
-        if self.lazy[node] is None:
-            return
-        h = self.lazy[node]
-        left_child = 2 * node + 1
-        right_child = 2 * node + 2
-        assert h is not None, "Height is not None"
-        self.arr[left_child] = h
-        self.arr[right_child] = h
-        self.lazy[left_child] = h
-        self.lazy[right_child] = h
-        self.lazy[node] = None
-        return None
+#     def push(self, node: int) -> None:
+#         if self.lazy[node] is None:
+#             return
+#         h = self.lazy[node]
+#         left_child = 2 * node + 1
+#         right_child = 2 * node + 2
+#         assert h is not None, "Height is not None"
+#         self.arr[left_child] = h
+#         self.arr[right_child] = h
+#         self.lazy[left_child] = h
+#         self.lazy[right_child] = h
+#         self.lazy[node] = None
+#         return None
 
 
-class Solution:
-    def fallingSquares(self, positions: list[list[int]]) -> list[int]:
+# class Solution:
+#     def fallingSquares(self, positions: list[list[int]]) -> list[int]:
 
-        def coordinate_compression(positions: list[list[int]]) -> list[int]:
-            coordinates: set[int] = set()
-            for left, side in positions:
-                coordinates.add(left)
-                coordinates.add(left + side)
-            return sorted(coordinates)
+#         def coordinate_compression(positions: list[list[int]]) -> list[int]:
+#             coordinates: set[int] = set()
+#             for left, side in positions:
+#                 coordinates.add(left)
+#                 coordinates.add(left + side)
+#             return sorted(coordinates)
 
-        coordinates: list[int] = coordinate_compression(positions)
-        coordinate_to_index: dict[int, int] = {
-            coordinate: index for index, coordinate in enumerate(coordinates)
-        }
-        n: int = len(coordinates) - 1
-        res: list[int] = []
-        seg_tree: SegTree = SegTree(n, 0, max)
+#         coordinates: list[int] = coordinate_compression(positions)
+#         coordinate_to_index: dict[int, int] = {
+#             coordinate: index for index, coordinate in enumerate(coordinates)
+#         }
+#         n: int = len(coordinates) - 1
+#         res: list[int] = []
+#         seg_tree: SegTree = SegTree(n, 0, max)
 
-        max_height: int = 0
-        for left, side in positions:
-            left_index: int = coordinate_to_index[left]
-            right_index: int = coordinate_to_index[left + side] - 1
-            height: int = seg_tree.query(left_index, right_index) + side
-            seg_tree.update(height, left_index, right_index)
-            max_height = max(max_height, height)
-            res.append(max_height)
+#         max_height: int = 0
+#         for left, side in positions:
+#             left_index: int = coordinate_to_index[left]
+#             right_index: int = coordinate_to_index[left + side] - 1
+#             height: int = seg_tree.query(left_index, right_index) + side
+#             seg_tree.update(height, left_index, right_index)
+#             max_height = max(max_height, height)
+#             res.append(max_height)
 
-        return res
+#         return res
     
     
 # O(N log N) Time
@@ -362,3 +363,40 @@ class Solution:
 #             max_h = max(max_h, high)
 #             res.append(max_h)
 #         return res
+
+# Diff array approach
+from typing_extensions import List
+class Solution:
+    def fallingSquares(self, positions: List[List[int]]) -> List[int]:
+        
+        def coordinate_compression(positions: list[list[int]]) -> list[int]:
+            coordinates: set[int] = set()
+            for left, side in positions:
+                coordinates.add(left)
+                coordinates.add(left + side)
+            return sorted(coordinates)
+        
+        coordinates: list[int] = coordinate_compression(positions)
+        coordinate_to_index: dict[int, int] = {
+            coordinate: index for index, coordinate in enumerate(coordinates)
+        }
+        
+        n: int = len(coordinates) - 1
+        heights: list[int] = [0] * (n)
+        res = []
+        max_height = 0
+        for left, side in positions:
+            left_index: int = coordinate_to_index[left]
+            right_index: int = coordinate_to_index[left + side] - 1
+            maximum_in_range: int = max(heights[left_index:right_index + 1])
+            
+            max_height = max(maximum_in_range + side, max_height)
+            heights[left_index:right_index + 1] = [maximum_in_range + side] * (right_index - left_index + 1)
+            res.append(max_height)
+
+        return res
+        
+        
+        
+        
+        
