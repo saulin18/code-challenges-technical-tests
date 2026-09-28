@@ -14,16 +14,17 @@
 #     t.length == s.length + 1
 #     s and t consist of lowercase English letters.
 
-from collections import Counter
+
 class Solution:
     def findTheDifference(self, s: str, t: str) -> str:
-        s_count = Counter(s)
-        for char in t:
-            if char not in s_count or s_count[char] == 0:
-                return char
-            s_count[char] -= 1
-        return ""
-    
+        r = 0
+        # for char in t:
+        #     r ^= ord(char)
+        # for char in s:
+        #     r ^= ord(char)
+        for char in s + t:
+            r ^= ord(char)
+        return chr(r)
     
 # class Solution:
 #     def findTheDifference(self, s: str, t: str) -> str:

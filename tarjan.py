@@ -9,7 +9,7 @@ low = [-1] * (n + 1)
 disc = [-1] * (n + 1)
 timer = [1]
 articulation_points = set()
-
+bridges: set[tuple[int, int]] = set()
 
 while m > 0:
     u, v = map(int, input().split())
@@ -38,8 +38,11 @@ def tarjan(nodo_actual, padre):
             low[nodo_actual] = min(low[nodo_actual], disc[v])
     if padre == -1 and child > 1:
         articulation_points.add(nodo_actual)
+    if padre != -1 and low[nodo_actual] > disc[padre]:
+        bridges.add((nodo_actual, padre))
 
 for i in range(1, n + 1):
     if i not in visitados:
         tarjan(i, -1)
 print(articulation_points)
+print(bridges)
