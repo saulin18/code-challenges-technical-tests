@@ -21,37 +21,106 @@
 #     ai != bi
 #     There are no repeated edges.
 #     The given graph is connected.
-from typing import List
-class DSU:
-    def __init__(self, n: int) -> None:
-        self.parent = list(range(n))
-        self.rank = [0] * n
-    def find(self, x: int) -> int:
-        if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
-        return self.parent[x]
+# from collections import defaultdict
+# from typing import List
+# class DSU:
+#     def __init__(self, n: int) -> None:
+#         self.parent = list(range(n))
+#         self.rank = [0] * n
+#     def find(self, x: int) -> int:
+#         if self.parent[x] != x:
+#             self.parent[x] = self.find(self.parent[x])
+#         return self.parent[x]
 
-    def union(self, x: int, y: int) -> None:
-        x_parent = self.find(x)
-        y_parent = self.find(y)
-        if x_parent == y_parent:
-            return
-        if self.rank[x_parent] < self.rank[y_parent]:
-            self.parent[x_parent] = y_parent
-        elif self.rank[x_parent] > self.rank[y_parent]:
-            self.parent[y_parent] = x_parent
-        else:
-            self.parent[x_parent] = y_parent
-            self.rank[y_parent] += 1
+#     def union(self, x: int, y: int) -> None:
+#         x_parent = self.find(x)
+#         y_parent = self.find(y)
+#         if x_parent == y_parent:
+#             return
+#         if self.rank[x_parent] < self.rank[y_parent]:
+#             self.parent[x_parent] = y_parent
+#         elif self.rank[x_parent] > self.rank[y_parent]:
+#             self.parent[y_parent] = x_parent
+#         else:
+#             self.parent[x_parent] = y_parent
+#             self.rank[y_parent] += 1
+
+
+# class Solution:
+#     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+#         n = len(edges)
+#         UnionFind = DSU(n)
+#         for x, y in edges:
+#             if UnionFind.find(x) == UnionFind.find(y):
+#                 return [x, y]
+#             UnionFind.union(x, y)
+
+#         return []
+
+
+from collections import defaultdict
 
 
 class Solution:
-    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+    def findRedundantConnection(self, edges: list[list[int]]) -> list[int]:
         n = len(edges)
-        UnionFind = DSU(n)
-        for x, y in edges:
-            if UnionFind.find(x) == UnionFind.find(y):
-                return [x, y]
-            UnionFind.union(x, y)
 
-        return []
+        adj_list = defaultdict(list)
+        for x, y in edges:
+            adj_list[x].append(y)
+            adj_list[y].append(x)
+
+        bridges = self.findBridges(adj_list, n)
+        candidates = []
+        bridges_set = set(bridges)
+        
+        for u, v in edges:
+            if (u, v) in bridges_set or (v, u) in bridges_set:
+                continue
+            else:
+                candidates.append((u, v))
+        return candidates[-1] if candidates else []
+        
+
+    def findBridges(
+        self, adj_list: defaultdict[int, list[int]], n: int
+    ) -> list[list[int]]:
+        bridges = []
+        visited = [False] * (n + 1)
+        discovery = [0] * (n + 1)
+        low = [0] * (n + 1)
+        time = [0]
+        for i in range(1, n + 1):
+            if not visited[i]:
+                self.dfs(i, -1, adj_list, visited, discovery, low, time, bridges)
+        return bridges
+
+    def dfs(
+        self,
+        node: int,
+        parent: int,
+        adj_list: defaultdict[int, list[int]],
+        visited: list[bool],
+        discovery: list[int],
+        low: list[int],
+        time: list[int],
+        bridges: list[tuple[int, int]],
+    ):
+
+        visited[node] = True
+        discovery[node] = time[0]
+        low[node] = time[0]
+        time[0] += 1
+        for neighbor in adj_list[node]:
+            if neighbor == parent:
+                continue
+            if not visited[neighbor]:
+                self.dfs(
+                    neighbor, node, adj_list, visited, discovery, low, time, bridges
+                )
+                low[node] = min(low[node], low[neighbor])
+
+            if low[neighbor] > discovery[node]:
+                bridges.append((node, neighbor))
+            else:
+                low[node] = min(low[node], discovery[neighbor])

@@ -36,3 +36,27 @@ def maxArea(height):
         return max_area            
         
 print(maxArea([8,7,2,1]))        
+
+
+# class Solution:
+#     def maxArea(self, height: list[int]) -> int:
+#         left = 0
+#         n = len(height)
+#         right = n - 1
+#         max_water = float("-inf")
+
+#         while left < right:
+#             left_less_than_right = height[left] < height[right]
+#             qt_of_water = min(height[left], height[right]) * abs(right - left)
+
+#             max_water = max(max_water, qt_of_water)
+
+#             if left_less_than_right:
+#                 left +=1
+#             else:
+#                 right -=1
+        
+#         return max_water
+
+            
+        
