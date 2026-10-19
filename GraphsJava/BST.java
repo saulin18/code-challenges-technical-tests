@@ -81,6 +81,49 @@ public class BST {
         doDFS(TreeNode.right);
     }
 
+    public int heightOfTree(TreeNode root, int depth) {
+
+        var hasLeft = root.left != null;
+        var hasRight = root.right != null;
+
+        if (!hasLeft && !hasRight) {
+            return depth;
+        }
+
+        int depthLeft = -1;
+        if (hasLeft) {
+            depthLeft = heightOfTree(root.left, depth + 1);
+        }
+
+        var depthRight = -1;
+        if (hasRight) {
+            depthRight = heightOfTree(root.right, depth + 1);
+        }
+
+        return Math.max(depthLeft, depthRight);
+    }
+
+    public boolean isValidTree(TreeNode root, int min, int max){
+
+        var condition = (min < root.data && root.data < max);
+
+        var validLeft = true;
+
+        if(root.left != null){
+            validLeft  = isValidTree(root.left, min, root.data);
+        }
+
+        var validRight = true;
+
+        if (root.right != null) {
+            validRight = isValidTree(root.right, root.data, max);
+        }
+
+        return condition && validLeft && validRight;
+
+    
+    }
+
     public void doBFS(TreeNode TreeNode) {
         var queue = new LinkedList<TreeNode>();
         queue.add(TreeNode);
