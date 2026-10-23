@@ -1,4 +1,8 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.PriorityQueue;
+
 public class ED {
     HashMap<Double, Double> memoFib;
     HashMap<Double, Double> memoFact;
@@ -107,5 +111,43 @@ public class ED {
 
 
    }
-    
+
+    public List<Integer> mergeSort(List<Integer> list) {
+        return doMergeSort(0, list.size() - 1, list);
+    }
+
+    public List<Integer> doMergeSort(int left, int right, List<Integer> array) {
+        if (left > right) {
+            return array;
+        }
+        if (left == right) {
+            return array;
+        }
+
+        int pivot = (int) (Math.random() * (right - left + 1));
+        var lessThanPivot = new ArrayList<Integer>();
+        var greaterThanPivot = new ArrayList<Integer>();
+
+        for (int i = 0; i < pivot; i++) {
+            if (array.get(i) < array.get(pivot)) {
+                lessThanPivot.add(array.get(i));
+            } else {
+                greaterThanPivot.add(array.get(i));
+            }
+        }
+
+        for (int i = pivot + 1; i < array.size(); i++) {
+            if (array.get(i) > array.get(pivot)) {
+                greaterThanPivot.add(array.get(i));
+            } else {
+                lessThanPivot.add(array.get(i));
+            }
+        }
+
+        var sorted = new ArrayList<Integer>();
+        sorted.addAll(doMergeSort(0, lessThanPivot.size() - 1, lessThanPivot));
+        sorted.add(array.get(pivot));
+        sorted.addAll(doMergeSort(0, greaterThanPivot.size() - 1, greaterThanPivot));
+        return sorted;
+    }
 }
